@@ -1,13 +1,5 @@
 <?php
-/*
-require_once("src/JCN/ClienteGrauImportancia.php");
-require_once("src/JCN/Types/ClienteEnderecoCobranca.php");
-require_once("src/JCN/Cliente.php");
-require_once("src/JCN/Types/ClientePF.php");
-require_once("src/JCN/Types/ClientePJ.php");
-*/
-
-define("CLASS_DIR","$_SERVER[DOCUMENT_ROOT]/src/"); //utilizei document_root apenas porque o index esta na raiz dele
+define("CLASS_DIR","$_SERVER[DOCUMENT_ROOT]/phpOO4/src/"); //utilizei document_root apenas porque o index esta na raiz dele
 set_include_path(get_include_path().PATH_SEPARATOR.CLASS_DIR);
 spl_autoload_register(function ($class) {
     require_once(str_replace('\\', '/', $class . '.php'));
@@ -15,7 +7,20 @@ spl_autoload_register(function ($class) {
 
 use JCN\Cliente\Types\ClientePF;
 use JCN\Cliente\Types\ClientePJ;
+use JCN\DataBase\ServiceData;
+use JCN\DataBase\Conexao;
 
+$conexao=new Conexao("localhost", '5432', "testedb", "sisadmin", "s1sadm1n");
+$serviceDb = new ServiceData($conexao->connect());
+FOREACH($serviceDb->listar() as $cli)
+{
+    if($cli['tipo']=='PF')
+        $clientes[$cli['codigo']] = new ClientePF($cli['codigo'],$cli['nome'],$cli['endereco'],$cli['telefone'],$cli['email'],$cli['codigo'],$cli['cpf_cnpj'],$cli['grau_importancia'],$cli['endereco_cobranca'],$cli['tipo']);
+    else
+        $clientes[$cli['codigo']] = new ClientePJ($cli['codigo'],$cli['nome'],$cli['endereco'],$cli['telefone'],$cli['email'],$cli['codigo'],$cli['cpf_cnpj'],$cli['grau_importancia'],$cli['endereco_cobranca'],$cli['tipo']);
+}
+
+/*
     $clientes[1]  = new ClientePF("1" ,"João Carlos Fernandes", "Rua Cinco de Maio, 987","(21) 99876-5432","joao.calos@gmail.com","123.123.123-12", "5", "Rua de Cobrança, 123");
     $clientes[2]  = new ClientePJ("2" ,"Marta Valéria LTDA","Rua Cinco de Maio, 87","(21) 98589-4578","marcaval23@terra.com.br", "33.333.333.0001-11","4", "Endereço de Cobraça, 444");
     $clientes[3]  = new ClientePF("3" ,"Homer Simpson","Rua 3 de Março, 7","(21) 96541-7412","homersimpson@burnes.com", "555.555.555-52","4", "");
@@ -26,8 +31,8 @@ use JCN\Cliente\Types\ClientePJ;
     $clientes[8]  = new ClientePJ("8" ,"Ronaldo Nazário de Lima","Alameda Lacerda, 859","(21) 32165-9845","ronaldor9@@r9.com", "44.144.124/0001-44", "1", "Rua novo Endereço de Cobranca, 665");
     $clientes[9]  = new ClientePF("9" ,"Roberto Carlos Coelho","Av Sete de Setembro, 414","(21) 99876-5432","robertocoelho@uol.com.br", "987.987.987-54","1", "");
     $clientes[10] = new ClientePJ("10","Albertina Bonfim","Rua Dois, 44","(22) 2745-5478","albertina.bonfim@gmail.com", "45.456.456/0001-45", "2", "Endereço do Trabalho");
+*/
 
-//print '<pre>';print_r($clientes);print "</pre>";
 if(isset($_GET['id']))
 {
     $id = $_GET['id'];
@@ -49,4 +54,5 @@ if(isset($_GET['id']))
     print "</fieldset>";
 
 }
+
 ?>

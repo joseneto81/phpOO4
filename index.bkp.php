@@ -19,6 +19,7 @@
 
 require_once("scripts/lista_clientes.php");
 
+
 print'<div id="container" class="container">';
 
 

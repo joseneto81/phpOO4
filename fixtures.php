@@ -11,14 +11,16 @@ use JCN\Cliente\Types\ClientePJ;
 use JCN\Cliente\Cliente;
 use JCN\DataBase\ServiceData;
 use JCN\DataBase\Conexao;
+require_once("src/JCN/DataBase/Config.php");
+
 /*
 * Função para criar um banco de dados no pgsql.
 */
-function conectar() {
-$dsn = 'pgsql:dbname=template1;host=localhost;port=5432';
-$user = "sisadmin";
-$password = "s1sadm1n";
-$banco = "testedb";
+
+$dsn = "pgsql:dbname=template1;host=$HOST;port=$PORT";
+$user = "$USER";
+$password = "$PASS";
+$banco = "$DB";
 try {
 $conexao = new \PDO($dsn, $user, $password);
 // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -57,10 +59,8 @@ catch (PDOException $e)
     echo "<hr>Erro ao cadastrar no banco!<br />";
     die("Código: {$e->getCode()} <br> Mensagem: {$e->getMessage()}");
 }
-return $conexao;
-}
 
-conectar();
+
 
 $cliente=new ClientePF();
 $conexao=new Conexao("localhost", '5432', "testedb", "sisadmin", "s1sadm1n");

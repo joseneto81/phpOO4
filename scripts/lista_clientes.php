@@ -10,7 +10,9 @@ use JCN\Cliente\Types\ClientePJ;
 use JCN\DataBase\ServiceData;
 use JCN\DataBase\Conexao;
 
-$conexao=new Conexao("localhost", '5432', "testedb", "sisadmin", "s1sadm1n");
+require_once("JCN/DataBase/Config.php");
+
+$conexao=new Conexao("$HOST", "$PORT", "$DB", "$USER", "$PASS");
 $serviceDb = new ServiceData($conexao->connect());
 FOREACH($serviceDb->listar() as $cli)
 {
